@@ -10,6 +10,7 @@ import { unlock, sfx } from './core/sound.js'
 import { clearAll, load, save } from './core/store.js'
 import { h, openSheet, switchRow, confirmDialog, setHeader } from './core/ui.js'
 import membersView from './features/members-view.js'
+import dice from './features/dice.js'
 
 function comingSoon(id, title) {
   return {
@@ -23,7 +24,7 @@ function comingSoon(id, title) {
 
 const FEATURES = [
   membersView,
-  comingSoon('dice', 'サイコロ'),
+  dice,
   comingSoon('roulette', 'ルーレット'),
   comingSoon('amida', 'あみだくじ'),
   comingSoon('teams', 'チーム分け'),

@@ -393,6 +393,18 @@ svg {
   width: var(--tap);
 }
 
+.btn svg,
+.list-btn svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .btn-icon svg {
   width: 22px;
   height: 22px;
