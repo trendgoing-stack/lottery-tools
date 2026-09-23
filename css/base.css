@@ -634,7 +634,8 @@ dialog.sheet {
   inset: auto 0 0 0;
   width: 100%;
   max-width: 640px;
-  max-height: calc(100dvh - var(--safe-top) - 24px);
+  /* --visible-h は JS（ui.js の keepInView）が、実際に見えている高さを入れる */
+  max-height: calc(var(--visible-h, 100dvh) - var(--safe-top) - 24px);
   margin: 0 auto;
   padding: 0;
   border: 0;
@@ -648,6 +649,11 @@ dialog.sheet {
 dialog.sheet[open] {
   display: flex;
   flex-direction: column;
+  animation: fade-in 0.22s ease-out;
+}
+
+/* 位置の計算に影響しないよう、動かすのは中身だけにする */
+dialog.sheet[open] > * {
   animation: sheet-in 0.22s ease-out;
 }
 
@@ -658,6 +664,11 @@ dialog.sheet::backdrop {
 @keyframes sheet-in {
   from {
     transform: translateY(40px);
+  }
+}
+
+@keyframes fade-in {
+  from {
     opacity: 0;
   }
 }
@@ -688,6 +699,8 @@ dialog.sheet::backdrop {
 /* 中央の確認ダイアログ */
 dialog.modal {
   width: min(calc(100% - 48px), 360px);
+  max-height: calc(var(--visible-h, 100dvh) - 24px);
+  overflow-y: auto;
   padding: 20px;
   border: 0;
   border-radius: 18px;
