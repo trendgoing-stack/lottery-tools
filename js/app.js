@@ -13,6 +13,7 @@ import membersView from './features/members-view.js'
 import dice from './features/dice.js'
 import roulette from './features/roulette.js'
 import amida from './features/amida.js'
+import teams from './features/teams.js'
 
 function comingSoon(id, title) {
   return {
@@ -29,7 +30,7 @@ const FEATURES = [
   dice,
   roulette,
   amida,
-  comingSoon('teams', 'チーム分け'),
+  teams,
   comingSoon('more', 'その他'),
 ]
 const DEFAULT_TAB = 'members'

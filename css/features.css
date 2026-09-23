@@ -730,3 +730,89 @@
 .amida-results li.is-prize .amida-result-text {
   color: var(--accent);
 }
+
+/* ---------- チーム分け ---------- */
+
+.teams-preview {
+  margin: 10px 4px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.ng-row {
+  width: 100%;
+  margin-top: 4px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+.ng-form {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+}
+
+.ng-form .btn {
+  grid-column: 1 / -1;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.team-card {
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  border-top: 5px solid var(--c);
+  overflow: hidden;
+}
+
+.team-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 10px 12px 4px;
+  font-weight: 800;
+  color: var(--c);
+}
+
+.team-head .small {
+  color: var(--text-2);
+  font-weight: 600;
+}
+
+.team-members {
+  margin: 0;
+  padding: 0 12px 12px;
+  list-style: none;
+}
+
+.team-member {
+  padding: 5px 0;
+  font-size: 17px;
+  font-weight: 600;
+  word-break: break-all;
+  transition: opacity 0.25s, transform 0.25s;
+}
+
+.team-member + .team-member {
+  border-top: 1px dashed var(--border);
+}
+
+.team-member.is-hidden {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.team-leader {
+  margin-right: 4px;
+  color: var(--accent);
+}

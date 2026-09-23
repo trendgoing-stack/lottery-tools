@@ -482,6 +482,6 @@ export function setHeader(title, backHref = null) {
 }
 
 /** 項目ごとの色（ルーレットの扇形、あみだの線など） */
-export const PALETTE = ['#ef4444', '#f59e0b', '#eab308', '#22c55e', '#14b8a6', '#3b82f6', '#6366f1', '#a855f7', '#ec4899', '#f97316', '#84cc16', '#06b6d4']
+export const PALETTE = ['#ef4444', '#3b82f6', '#22c55e', '#f59e0b', '#a855f7', '#14b8a6', '#ec4899', '#84cc16', '#6366f1', '#f97316', '#06b6d4', '#eab308']
 
 export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
