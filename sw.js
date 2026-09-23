@@ -37,6 +37,7 @@ const ASSETS = [
   './js/core/show.js',
   './js/features/members-view.js',
   './js/features/dice.js',
+  './js/features/roulette.js',
   './icons/apple-touch-icon.png',
   './icons/icon-192.png',
   './icons/icon-512.png',

@@ -11,6 +11,7 @@ import { clearAll, load, save } from './core/store.js'
 import { h, openSheet, switchRow, confirmDialog, setHeader } from './core/ui.js'
 import membersView from './features/members-view.js'
 import dice from './features/dice.js'
+import roulette from './features/roulette.js'
 
 function comingSoon(id, title) {
   return {
@@ -25,7 +26,7 @@ function comingSoon(id, title) {
 const FEATURES = [
   membersView,
   dice,
-  comingSoon('roulette', 'ルーレット'),
+  roulette,
   comingSoon('amida', 'あみだくじ'),
   comingSoon('teams', 'チーム分け'),
   comingSoon('more', 'その他'),

@@ -45,10 +45,15 @@ export function animate(duration, onFrame) {
     function step(now) {
       const t = Math.min(1, (now - start) / duration)
       onFrame(t)
-      if (t < 1) requestAnimationFrame(step)
+      if (t < 1) next()
       else resolve()
     }
-    requestAnimationFrame(step)
+    // 画面が隠れていると requestAnimationFrame が止まるので、そのときはタイマーで進めて演出を終わらせる
+    function next() {
+      if (document.hidden) setTimeout(() => step(performance.now()), 50)
+      else requestAnimationFrame(step)
+    }
+    next()
   })
 }
 
