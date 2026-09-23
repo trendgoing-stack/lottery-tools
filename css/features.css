@@ -1,0 +1,167 @@
+/* ============================================================
+   各機能の見た目
+   ============================================================ */
+
+.toast-action {
+  margin-left: 8px;
+  padding: 6px 4px;
+  min-height: 32px;
+  border: 0;
+  background: transparent;
+  color: #b3abff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ---------- メンバー ---------- */
+
+.group-chips {
+  display: flex;
+  gap: 8px;
+  margin: 0 -16px 12px;
+  padding: 2px 16px 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.group-chips::-webkit-scrollbar {
+  display: none;
+}
+
+.chip {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 40px;
+  padding: 6px 16px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.chip[aria-selected="true"] {
+  border-color: transparent;
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.chip-add {
+  border-style: dashed;
+  color: var(--primary);
+}
+
+.chip svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+
+.group-name {
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.3;
+  word-break: break-all;
+}
+
+.add-form {
+  margin-top: 12px;
+}
+
+.group-head .btn-ghost {
+  margin-top: 4px;
+}
+
+.list-toolbar {
+  margin: 20px 0 8px 4px;
+  min-height: var(--tap);
+}
+
+.list-toolbar .btn {
+  padding: 8px 10px;
+}
+
+.member-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.member {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 56px;
+  padding: 4px 4px 4px 14px;
+}
+
+.member + .member {
+  border-top: 1px solid var(--border);
+}
+
+.member .switch {
+  margin-right: 6px;
+}
+
+.member-name {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--tap);
+  padding: 0 4px;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font-size: 17px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.member.is-off .member-name {
+  color: var(--text-2);
+  text-decoration: line-through;
+  text-decoration-color: color-mix(in srgb, var(--text-2) 50%, transparent);
+}
+
+.member-index {
+  width: 1.8em;
+  color: var(--text-2);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.member .btn-icon {
+  border-color: transparent;
+  background: transparent;
+  color: var(--text-2);
+}
+
+.member .btn-icon:disabled {
+  opacity: 0.25;
+}
+
+.leader-btn[aria-pressed="true"] {
+  color: var(--accent) !important;
+}
+
+.leader-btn[aria-pressed="true"] svg {
+  fill: currentColor;
+}
+
+.legend {
+  margin: 10px 4px 0;
+}

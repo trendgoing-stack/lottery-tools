@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>抽選ツール</title>
+  <meta name="description" content="サイコロ・ルーレット・あみだくじ・チーム分けなど、抽選とランダムの道具箱。">
+  <meta name="theme-color" content="#f4f4f8" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f0f14" media="(prefers-color-scheme: dark)">
+  <meta name="color-scheme" content="light dark">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="抽選ツール">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/features.css">
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <button type="button" class="update-banner" id="updateBanner" hidden>更新があります（タップで再読み込み）</button>
+
+  <header class="app-header">
+    <a class="header-back" id="headerBack" href="#more" hidden aria-label="戻る">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+    </a>
+    <h1 class="header-title" id="headerTitle">抽選ツール</h1>
+    <button type="button" class="icon-btn" id="btnMute" aria-label="効果音">
+      <svg class="icon-sound-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>
+      <svg class="icon-sound-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M17 9l5 6M22 9l-5 6"/></svg>
+    </button>
+    <button type="button" class="icon-btn" id="btnSettings" aria-label="設定">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+    </button>
+  </header>
+
+  <main class="views" id="views">
+    <section class="view" data-view="members" hidden></section>
+    <section class="view" data-view="dice" hidden></section>
+    <section class="view" data-view="roulette" hidden></section>
+    <section class="view" data-view="amida" hidden></section>
+    <section class="view" data-view="teams" hidden></section>
+    <section class="view" data-view="more" hidden></section>
+  </main>
+
+  <nav class="tabbar" aria-label="機能">
+    <a class="tab" href="#members" data-tab="members">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 6 4.8"/></svg>
+      <span>メンバー</span>
+    </a>
+    <a class="tab" href="#dice" data-tab="dice">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><circle class="pip" cx="8.5" cy="8.5" r="1.4"/><circle class="pip" cx="12" cy="12" r="1.4"/><circle class="pip" cx="15.5" cy="15.5" r="1.4"/></svg>
+      <span>サイコロ</span>
+    </a>
+    <a class="tab" href="#roulette" data-tab="roulette">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8.5"/><path d="M12 13V4.5M12 13l7.4 4.2M12 13l-7.4 4.2"/><path d="M10 1.8h4L12 4.5z"/></svg>
+      <span>ルーレット</span>
+    </a>
+    <a class="tab" href="#amida" data-tab="amida">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3v18M12 3v18M19 3v18M5 8h7M12 13h7M5 17h7"/></svg>
+      <span>あみだ</span>
+    </a>
+    <a class="tab" href="#teams" data-tab="teams">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="4" width="8" height="16" rx="2.5"/><rect x="13.5" y="4" width="8" height="16" rx="2.5"/><path d="M5 9h3M5 12h3M5 15h3M16 9h3M16 12h3M16 15h3"/></svg>
+      <span>チーム分け</span>
+    </a>
+    <a class="tab" href="#more" data-tab="more">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle class="pip" cx="5" cy="12" r="1.8"/><circle class="pip" cx="12" cy="12" r="1.8"/><circle class="pip" cx="19" cy="12" r="1.8"/></svg>
+      <span>その他</span>
+    </a>
+  </nav>
+
+  <div class="toast-area" id="toastArea" aria-live="polite"></div>
+</body>
+</html>
