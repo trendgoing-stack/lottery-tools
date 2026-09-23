@@ -816,3 +816,461 @@
   margin-right: 4px;
   color: var(--accent);
 }
+
+/* ---------- その他：メニュー ---------- */
+
+.more-menu {
+  display: grid;
+  gap: 12px;
+}
+
+.more-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 84px;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.more-item:active {
+  transform: scale(0.99);
+}
+
+.more-emoji {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--primary-soft);
+  font-size: 28px;
+}
+
+.more-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.more-title {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.more-desc {
+  font-size: 13px;
+  color: var(--text-2);
+}
+
+/* ---------- 順番決め ---------- */
+
+.order-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 56px;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.order-item.is-new {
+  animation: slide-in 0.3s ease-out;
+}
+
+.order-item.is-pending {
+  opacity: 0.6;
+}
+
+.order-item.is-pending .order-name {
+  animation: blink 0.5s steps(2) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+}
+
+.order-rank {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.order-item.is-first .order-rank {
+  background: var(--accent);
+  color: #fff;
+}
+
+.order-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 20px;
+  font-weight: 700;
+  word-break: break-all;
+}
+
+.order-empty {
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+/* ---------- じゃんけん ---------- */
+
+.janken-rounds {
+  margin-top: 12px;
+}
+
+.janken-round-head {
+  font-weight: 700;
+}
+
+.janken-badge {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.janken-badge.is-aiko {
+  background: var(--surface-2);
+  color: var(--text-2);
+}
+
+.janken-call {
+  display: none;
+  text-align: center;
+  font-size: 32px;
+  font-weight: 800;
+  padding: 12px 0;
+}
+
+.janken-round.is-waiting .janken-call {
+  display: block;
+}
+
+.janken-round.is-waiting .janken-hands,
+.janken-round.is-waiting .janken-badge {
+  display: none;
+}
+
+.janken-hands {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+  gap: 8px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.janken-hands li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 4px;
+  border-radius: 12px;
+  background: var(--surface-2);
+  animation: pop-in 0.35s ease-out;
+}
+
+.janken-hands li.is-win {
+  background: var(--accent-soft);
+  outline: 2px solid var(--accent);
+}
+
+.janken-hands li.is-lose {
+  opacity: 0.45;
+}
+
+.janken-hand {
+  font-size: 34px;
+  line-height: 1.2;
+}
+
+.janken-name {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.janken-winner {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.janken-winner-name {
+  font-size: 32px;
+  font-weight: 800;
+  word-break: break-all;
+}
+
+/* ---------- くじ引き ---------- */
+
+.lots-status {
+  text-align: center;
+}
+
+.lots-prize-count {
+  color: var(--accent);
+}
+
+.lots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.lot {
+  min-height: 96px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  perspective: 600px;
+  cursor: pointer;
+}
+
+.lot:disabled {
+  cursor: default;
+}
+
+.lot-inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 96px;
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease-out;
+}
+
+.lot.is-prize .lot-inner,
+.lot.is-blank .lot-inner {
+  transform: rotateY(180deg);
+}
+
+.lot-front,
+.lot-back {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 6px;
+  border-radius: 14px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.lot-front {
+  background: var(--primary);
+  color: var(--on-primary);
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--primary) 60%, #000);
+}
+
+.lot-back {
+  transform: rotateY(180deg);
+  background: var(--surface-2);
+  color: var(--text-2);
+}
+
+.lot.is-prize .lot-back {
+  background: var(--accent);
+  color: #fff;
+}
+
+.lot-name {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 800;
+}
+
+.lot-hint {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.lot-result {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.lot.is-shaking .lot-inner {
+  animation: shake 0.14s linear infinite;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(-4deg);
+  }
+  75% {
+    transform: rotate(4deg);
+  }
+}
+
+.lots-winners {
+  margin-top: 2px;
+  font-size: 22px;
+  font-weight: 800;
+  word-break: break-all;
+}
+
+/* ---------- コイントス ---------- */
+
+.coin-stage {
+  text-align: center;
+}
+
+.coin-button {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 200px;
+  border: 0;
+  background: transparent;
+  perspective: 800px;
+  cursor: pointer;
+}
+
+.coin-button.is-tossing {
+  animation: coin-toss 1.6s cubic-bezier(0.3, 0.8, 0.4, 1);
+}
+
+@keyframes coin-toss {
+  0% {
+    transform: translateY(0);
+  }
+  35% {
+    transform: translateY(-60px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.coin {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  transform-style: preserve-3d;
+}
+
+.coin-face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 56px;
+  font-weight: 800;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.coin-heads {
+  background: radial-gradient(circle at 35% 30%, #ffe28a, #f5b50b 60%, #c98a00);
+  color: #7a5200;
+  box-shadow: inset 0 0 0 8px rgba(255, 255, 255, 0.35), inset 0 0 0 10px rgba(122, 82, 0, 0.35);
+}
+
+.coin-tails {
+  transform: rotateX(180deg);
+  background: radial-gradient(circle at 35% 30%, #ffffff, #c7c9d3 60%, #8e91a0);
+  color: #4a4d5a;
+  box-shadow: inset 0 0 0 8px rgba(255, 255, 255, 0.5), inset 0 0 0 10px rgba(74, 77, 90, 0.3);
+}
+
+.coin-result {
+  min-height: 56px;
+  display: grid;
+  place-items: center;
+}
+
+.coin-label {
+  font-size: 40px;
+  font-weight: 800;
+}
+
+.coin-label.is-heads {
+  color: var(--accent);
+}
+
+.coin-counts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  text-align: center;
+}
+
+.coin-count {
+  font-size: 28px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.coin-history {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 12px;
+}
+
+.coin-history span {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.coin-history .is-heads {
+  background: #f5b50b;
+  color: #5a3c00;
+}
+
+.coin-history .is-tails {
+  background: #c7c9d3;
+  color: #35374a;
+}

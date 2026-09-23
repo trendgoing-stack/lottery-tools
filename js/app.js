@@ -14,16 +14,7 @@ import dice from './features/dice.js'
 import roulette from './features/roulette.js'
 import amida from './features/amida.js'
 import teams from './features/teams.js'
-
-function comingSoon(id, title) {
-  return {
-    id,
-    title,
-    init(el) {
-      el.append(h('div', { class: 'view-inner' }, h('div', { class: 'card empty' }, `「${title}」は準備中です`)))
-    },
-  }
-}
+import more from './features/more.js'
 
 const FEATURES = [
   membersView,
@@ -31,7 +22,7 @@ const FEATURES = [
   roulette,
   amida,
   teams,
-  comingSoon('more', 'その他'),
+  more,
 ]
 const DEFAULT_TAB = 'members'
 
