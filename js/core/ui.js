@@ -18,7 +18,10 @@ export function h(tag, attrs = {}, ...children) {
     } else if (key === 'dataset') {
       Object.assign(el.dataset, value)
     } else if (key === 'style' && typeof value === 'object') {
-      Object.assign(el.style, value)
+      for (const [prop, v] of Object.entries(value)) {
+        if (prop.startsWith('--')) el.style.setProperty(prop, v)
+        else el.style[prop] = v
+      }
     } else if (key in el && typeof value !== 'string') {
       el[key] = value
     } else {
@@ -477,5 +480,8 @@ export function setHeader(title, backHref = null) {
   back.hidden = !backHref
   if (backHref) back.href = backHref
 }
+
+/** 項目ごとの色（ルーレットの扇形、あみだの線など） */
+export const PALETTE = ['#ef4444', '#f59e0b', '#eab308', '#22c55e', '#14b8a6', '#3b82f6', '#6366f1', '#a855f7', '#ec4899', '#f97316', '#84cc16', '#06b6d4']
 
 export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))

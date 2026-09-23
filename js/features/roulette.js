@@ -6,7 +6,7 @@
  */
 import { weightedIndex, randFloat } from '../core/random.js'
 import { load, save, uid, cleanText, clampInt } from '../core/store.js'
-import { h, replace, iconButton, groupBar, loadMembersButton, switchRow, stepper, resultActions, toast, openSheet, promptDialog, menuSheet, confirmDialog } from '../core/ui.js'
+import { h, replace, iconButton, PALETTE, groupBar, loadMembersButton, switchRow, stepper, resultActions, toast, openSheet, promptDialog, menuSheet, confirmDialog } from '../core/ui.js'
 import { runShow, isRunning, animate } from '../core/show.js'
 import { sfx } from '../core/sound.js'
 import { showStage } from '../core/stage.js'
@@ -17,7 +17,6 @@ const LABEL_MAX = 20
 const ITEMS_MAX = 60
 const SPIN_MS = 4600
 const TAU = Math.PI * 2
-const COLORS = ['#ef4444', '#f59e0b', '#eab308', '#22c55e', '#14b8a6', '#3b82f6', '#6366f1', '#a855f7', '#ec4899', '#f97316', '#84cc16', '#06b6d4']
 
 const DEFAULT_ITEMS = ['ラーメン', 'カレー', 'お寿司', '焼肉', 'パスタ', '定食']
 
@@ -118,10 +117,10 @@ function sectors() {
 }
 
 function colorFor(index, count) {
-  let c = index % COLORS.length
+  let c = index % PALETTE.length
   // 最後と最初が同じ色で隣り合わないようにする
-  if (index === count - 1 && count > 1 && c === 0) c = 1 + (index % (COLORS.length - 1))
-  return COLORS[c]
+  if (index === count - 1 && count > 1 && c === 0) c = 1 + (index % (PALETTE.length - 1))
+  return PALETTE[c]
 }
 
 function draw(rotation = state.rotation) {

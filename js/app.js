@@ -12,6 +12,7 @@ import { h, openSheet, switchRow, confirmDialog, setHeader } from './core/ui.js'
 import membersView from './features/members-view.js'
 import dice from './features/dice.js'
 import roulette from './features/roulette.js'
+import amida from './features/amida.js'
 
 function comingSoon(id, title) {
   return {
@@ -27,7 +28,7 @@ const FEATURES = [
   membersView,
   dice,
   roulette,
-  comingSoon('amida', 'あみだくじ'),
+  amida,
   comingSoon('teams', 'チーム分け'),
   comingSoon('more', 'その他'),
 ]
