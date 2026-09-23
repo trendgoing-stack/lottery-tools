@@ -137,9 +137,12 @@ function registerServiceWorker() {
   // 手元での開発中はキャッシュされると編集が反映されないので、localhost では ?sw を付けたときだけ登録する
   if (location.hostname === 'localhost' && !new URLSearchParams(location.search).has('sw')) return
 
+  // 初めて開いたときも新しい SW が制御を始めて controllerchange が起きるので、
+  // 再読み込みするのは、すでに SW の下で動いていた（＝更新の）ときだけにする
+  const hadController = Boolean(navigator.serviceWorker.controller)
   let reloading = false
   navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (reloading) return
+    if (reloading || !hadController) return
     reloading = true
     location.reload()
   })
