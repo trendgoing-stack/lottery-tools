@@ -16,8 +16,9 @@ export function isRunning() {
   return running
 }
 
+// 端末の「視差効果を減らす」は見ない。抽選の演出は見たい人が多いので、アプリの設定だけで切り替える
 export function shouldSkip() {
-  return settings.get().skipAnimation || window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  return settings.get().skipAnimation
 }
 
 export async function runShow(fn) {

@@ -68,6 +68,7 @@ body {
 }
 
 body {
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -256,7 +257,7 @@ svg {
 /* ---------- 更新バナー ---------- */
 
 .update-banner {
-  position: fixed;
+  position: absolute;
   z-index: 60;
   top: calc(var(--safe-top) + 8px);
   left: 50%;
@@ -627,49 +628,58 @@ body.is-busy [data-lock] {
   stroke-linecap: round;
 }
 
-/* ---------- シート（下から出るダイアログ） ---------- */
+/* ---------- シート・確認ダイアログ ----------
+ * iPhone のホーム画面アプリでは、<dialog> や position: fixed の基準になる高さが
+ * 実際の画面より大きくなることがあり、下寄せのシートが画面の外に出てしまう。
+ * そのため、画面全体の枠である body（タブバーを正しく下端に置いている箱）の中に
+ * position: absolute で重ねる。
+ */
 
-dialog.sheet {
-  position: fixed;
-  inset: auto 0 0 0;
-  width: 100%;
-  max-width: 640px;
-  /* --visible-h は JS（ui.js の keepInView）が、実際に見えている高さを入れる */
-  max-height: calc(var(--visible-h, 100dvh) - var(--safe-top) - 24px);
-  margin: 0 auto;
-  padding: 0;
-  border: 0;
-  border-radius: 20px 20px 0 0;
-  background: var(--surface);
-  color: var(--text);
-  box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
-}
-
-dialog.sheet[open] {
+.layer {
+  position: absolute;
+  z-index: 75;
+  inset: 0;
   display: flex;
   flex-direction: column;
-  animation: fade-in 0.22s ease-out;
-}
-
-/* 位置の計算に影響しないよう、動かすのは中身だけにする */
-dialog.sheet[open] > * {
-  animation: sheet-in 0.22s ease-out;
-}
-
-dialog.sheet::backdrop {
   background: rgba(0, 0, 0, 0.4);
+  animation: fade-in 0.2s ease-out;
 }
 
-@keyframes sheet-in {
-  from {
-    transform: translateY(40px);
-  }
+.layer-sheet {
+  justify-content: flex-end;
+  padding-top: calc(var(--safe-top) + 24px);
+}
+
+.layer-modal {
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--safe-top) + 12px) 24px calc(var(--safe-bottom) + 12px);
 }
 
 @keyframes fade-in {
   from {
     opacity: 0;
+  }
+}
+
+.sheet {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 640px;
+  max-height: 100%;
+  margin: 0 auto;
+  border-radius: 20px 20px 0 0;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 -4px 32px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: sheet-in 0.22s ease-out;
+}
+
+@keyframes sheet-in {
+  from {
+    transform: translateY(40px);
   }
 }
 
@@ -693,38 +703,34 @@ dialog.sheet::backdrop {
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   padding: 16px 20px calc(20px + var(--safe-bottom));
 }
 
 /* 中央の確認ダイアログ */
-dialog.modal {
-  width: min(calc(100% - 48px), 360px);
-  max-height: calc(var(--visible-h, 100dvh) - 24px);
+.modal {
+  width: min(100%, 360px);
+  max-height: 100%;
   overflow-y: auto;
   padding: 20px;
-  border: 0;
   border-radius: 18px;
   background: var(--surface);
   color: var(--text);
   box-shadow: var(--shadow);
 }
 
-dialog.modal::backdrop {
-  background: rgba(0, 0, 0, 0.4);
-}
-
-dialog.modal h2 {
+.modal h2 {
   margin: 0 0 8px;
   font-size: 17px;
 }
 
-dialog.modal p {
+.modal p {
   margin: 0 0 16px;
   color: var(--text-2);
   white-space: pre-line;
 }
 
-dialog.modal .input {
+.modal .input {
   margin-bottom: 16px;
 }
 
@@ -788,8 +794,8 @@ dialog.modal .input {
 /* ---------- トースト ---------- */
 
 .toast-area {
-  position: fixed;
-  z-index: 70;
+  position: absolute;
+  z-index: 90;
   left: 0;
   right: 0;
   bottom: calc(var(--tabbar-h) + var(--safe-bottom) + 12px);
@@ -827,8 +833,8 @@ dialog.modal .input {
 /* ---------- 全画面の結果表示 ---------- */
 
 .stage {
-  position: fixed;
-  z-index: 80;
+  position: absolute;
+  z-index: 85;
   inset: 0;
   display: flex;
   flex-direction: column;
@@ -901,11 +907,13 @@ dialog.modal .input {
   font-size: 14px;
 }
 
+/* 端末の「視差効果を減らす」では、画面の出入りの動きだけを止める。
+   抽選の演出はアプリの「演出スキップ」で切り替える */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
+  .layer,
+  .sheet,
+  .toast,
+  .stage {
+    animation: none;
   }
 }

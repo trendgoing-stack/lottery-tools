@@ -112,45 +112,53 @@ export function toast(message, { duration = 2200, action = null } = {}) {
   return dismiss
 }
 
-// ---------- ダイアログの位置合わせ ----------
+// ---------- 重ねて表示する画面（シート・確認ダイアログ） ----------
+
+/*
+ * <dialog> は使わない。iPhone のホーム画面アプリでは、<dialog> や position: fixed の基準になる
+ * 高さが実際の画面より大きくなることがあり、下寄せのシートが画面の外に出てしまうため。
+ * 代わりに、画面全体の枠である body の中に重ね（CSS の .layer）、後ろの画面は inert で操作できなくする。
+ */
+
+const openLayers = []
+
+/** いちばん手前の重ね表示だけを操作できるようにする */
+function updateInert() {
+  const top = openLayers[openLayers.length - 1] ?? null
+  for (const child of document.body.children) {
+    if (child.id === 'toastArea') continue
+    child.inert = top !== null && child !== top.el
+  }
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && openLayers.length) openLayers[openLayers.length - 1].dismiss()
+})
 
 /**
- * iPhone の Safari では、最前面に出す <dialog> の位置が、下のツールバーやキーボードの
- * 裏側まで含めた高さを基準に計算され、下寄せのシートが画面の外に隠れてしまうことがある。
- * 実際に見えている範囲（visualViewport）を測り、その中に収まるように位置を直す。
- * 正しく表示される環境では、ずれが 0 なので何も変わらない。
- *
- * @param {'bottom' | 'center'} align  下寄せ（シート）か中央（確認ダイアログ）か
- * @returns {() => void} 監視をやめる関数
+ * 重ね表示を開く。
+ * @param {'sheet' | 'modal'} kind
+ * @param {HTMLElement} panel  中身（.sheet か .modal）
+ * @param {() => void} dismiss  背景タップ・Esc で閉じるときの処理
+ * @returns {() => void} 取り除く関数
  */
-function keepInView(dialog, align) {
-  const vv = window.visualViewport
-  function update() {
-    const visibleTop = vv ? vv.offsetTop : 0
-    const visibleHeight = vv ? vv.height : window.innerHeight
-    dialog.style.setProperty('--visible-h', `${visibleHeight}px`)
-    if (align === 'bottom') {
-      dialog.style.bottom = '0px'
-      const shift = dialog.getBoundingClientRect().bottom - (visibleTop + visibleHeight)
-      if (Math.abs(shift) > 0.5) dialog.style.bottom = `${shift}px`
-    } else {
-      dialog.style.top = '0px'
-      dialog.style.bottom = 'auto'
-      dialog.style.marginTop = '0px'
-      dialog.style.marginBottom = '0px'
-      const rect = dialog.getBoundingClientRect()
-      const wanted = visibleTop + Math.max(12, (visibleHeight - rect.height) / 2)
-      dialog.style.top = `${wanted - rect.top}px`
-    }
-  }
-  update()
-  vv?.addEventListener('resize', update)
-  vv?.addEventListener('scroll', update)
-  window.addEventListener('resize', update)
+function openLayer(kind, panel, dismiss) {
+  const previousFocus = document.activeElement
+  const el = h('div', { class: `layer layer-${kind}` }, panel)
+  // 背景（中身の外）をタップしたら閉じる
+  el.addEventListener('click', (e) => {
+    if (e.target === el) dismiss()
+  })
+  const entry = { el, dismiss }
+  openLayers.push(entry)
+  document.body.append(el)
+  updateInert()
   return () => {
-    vv?.removeEventListener('resize', update)
-    vv?.removeEventListener('scroll', update)
-    window.removeEventListener('resize', update)
+    const index = openLayers.indexOf(entry)
+    if (index >= 0) openLayers.splice(index, 1)
+    el.remove()
+    updateInert()
+    if (previousFocus instanceof HTMLElement && previousFocus.isConnected) previousFocus.focus({ preventScroll: true })
   }
 }
 
@@ -162,43 +170,24 @@ function keepInView(dialog, align) {
  */
 export function openSheet(title, build, { onClose } = {}) {
   const body = h('div', { class: 'sheet-body' })
-  const dialog = h(
-    'dialog',
-    { class: 'sheet', 'aria-label': title },
+  const panel = h(
+    'div',
+    { class: 'sheet', role: 'dialog', 'aria-modal': 'true', 'aria-label': title, tabindex: '-1' },
     h('div', { class: 'sheet-head' }, h('h2', {}, title), iconButton('close', '閉じる', () => close())),
     body,
   )
   let closed = false
-  let stopKeeping = null
+  let remove = null
   function close() {
     if (closed) return
     closed = true
-    stopKeeping?.()
-    dialog.close()
-    dialog.remove()
+    remove?.()
     onClose?.()
   }
-  dialog.addEventListener('cancel', (e) => {
-    e.preventDefault()
-    close()
-  })
-  // 背景（ダイアログの外）をタップしたら閉じる
-  dialog.addEventListener('click', (e) => {
-    if (e.target === dialog) {
-      const r = dialog.getBoundingClientRect()
-      const inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom
-      if (!inside) close()
-    }
-  })
   build(body, close)
-  document.body.append(dialog)
-  dialog.showModal()
-  stopKeeping = keepInView(dialog, 'bottom')
-  // 開いた直後に入力欄へフォーカスが飛んでキーボードが出ないようにする
-  if (document.activeElement && dialog.contains(document.activeElement)) {
-    const focused = document.activeElement
-    if (focused.matches('input, textarea') && !focused.hasAttribute('autofocus')) focused.blur()
-  }
+  remove = openLayer('sheet', panel, close)
+  // キーボードが出ないよう、入力欄ではなくシート自体にフォーカスを置く
+  panel.focus({ preventScroll: true })
   return close
 }
 
@@ -206,32 +195,32 @@ export function openSheet(title, build, { onClose } = {}) {
 
 function modal(build) {
   return new Promise((resolve) => {
-    const dialog = h('dialog', { class: 'modal' })
+    const panel = h('div', { class: 'modal', role: 'dialog', 'aria-modal': 'true', tabindex: '-1' })
     let done = false
-    let stopKeeping = null
+    let remove = null
     function finish(value) {
       if (done) return
       done = true
-      stopKeeping?.()
-      dialog.close()
-      dialog.remove()
+      remove?.()
       resolve(value)
     }
-    dialog.addEventListener('cancel', (e) => {
-      e.preventDefault()
-      finish(null)
-    })
-    build(dialog, finish)
-    document.body.append(dialog)
-    dialog.showModal()
-    stopKeeping = keepInView(dialog, 'center')
+    build(panel, finish)
+    remove = openLayer('modal', panel, () => finish(null))
+    // 入力欄があればすぐにフォーカスする（iPhone はタップの処理の中でないとキーボードが出ない）
+    const input = panel.querySelector('input, textarea')
+    if (input) {
+      input.focus()
+      input.select()
+    } else {
+      panel.focus({ preventScroll: true })
+    }
   })
 }
 
 /** はい/いいえ。true か false を返す */
 export function confirmDialog({ title, message = '', ok = 'OK', cancel = 'キャンセル', danger = false }) {
-  return modal((dialog, finish) => {
-    dialog.append(
+  return modal((panel, finish) => {
+    panel.append(
       h('h2', {}, title),
       message ? h('p', {}, message) : null,
       h(
@@ -246,12 +235,11 @@ export function confirmDialog({ title, message = '', ok = 'OK', cancel = 'キャ
 
 /** 文字を入力してもらう。キャンセルなら null */
 export function promptDialog({ title, message = '', value = '', placeholder = '', ok = 'OK', maxLength = 30 }) {
-  return modal((dialog, finish) => {
+  return modal((panel, finish) => {
     const input = h('input', { class: 'input', type: 'text', value, placeholder, maxLength, enterkeyhint: 'done' })
     const form = h(
       'form',
       {
-        method: 'dialog',
         onsubmit: (e) => {
           e.preventDefault()
           finish(input.value)
@@ -267,11 +255,7 @@ export function promptDialog({ title, message = '', value = '', placeholder = ''
         h('button', { type: 'submit', class: 'btn btn-primary' }, ok),
       ),
     )
-    dialog.append(form)
-    requestAnimationFrame(() => {
-      input.focus()
-      input.select()
-    })
+    panel.append(form)
   })
 }
 
