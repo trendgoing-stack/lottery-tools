@@ -12,7 +12,7 @@
  * GitHub Pages のサブパス配信（/lottery-tools/）でもそのまま動く。
  * 同じドメインの他のアプリ（/reversi/ など）のキャッシュを消さないよう、接頭辞で区別する。
  */
-const VERSION = '1.0.2'
+const VERSION = '1.0.3'
 const CACHE_PREFIX = 'lottery-tools-'
 const CACHE_NAME = `${CACHE_PREFIX}v${VERSION}`
 
